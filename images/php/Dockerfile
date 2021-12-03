@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
         git \
         vim \
         nano \
-        nodejs \
-        npm \
+#        nodejs \
+#        npm \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -25,18 +25,22 @@ RUN apt-get update && apt-get install -y \
 	    && docker-php-ext-configure gd --with-freetype --with-jpeg \
         && docker-php-ext-install -j$(nproc) gd
 
+
 #php redis
 RUN pecl install redis && docker-php-ext-enable redis
 
 # Куда же без composer'а.
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+
 # Указываем рабочую директорию для PHP
 WORKDIR /var/www
 
 # права
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
-USER www-data
+USER 1000
 
 # Добавим свой php.ini, можем в нем определять свои значения конфига
 ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
