@@ -2,7 +2,7 @@ version: '3.8'
 services:
   php:
     container_name: ${APP_NAME}_php
-    build: ./images/php
+    build: ./images/php/php-7.4-fpm
     volumes:
       - ${APP_PATH}:/var/www
     networks:
@@ -54,3 +54,6 @@ networks:
   network_name_from_env:
     name: ${APP_NETWORK}
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
