@@ -2,9 +2,13 @@ version: '3.8'
 services:
   php:
     container_name: ${APP_NAME}_php
-    build: ./images/php/php-7.4-fpm
+    build:
+      context: ./images/php/php-${PHP_VER}-fpm
+      args:
+        NODE_VER: ${NODE_VER}
     volumes:
       - ${APP_PATH}:/var/www
+      - ./images/php/php-fpm.d/${PHP_FPM_CONF}:/usr/local/etc/php-fpm.d/${PHP_FPM_CONF}
     networks:
       - network_name_from_env
     environment:

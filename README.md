@@ -5,6 +5,9 @@ APP_PATH=./www
 APP_NAME=drums_channels
 APP_NETWORK=${APP_NAME}_network
 TZ=Europe/Kiev
+PHP_VER=8.0
+NODE_VER=14
+PHP_FPM_CONF=xlaravel.pool.conf
 ```
 ## Настройка портов nginx (если нужно) в docker-compose.yml
 ```yml
