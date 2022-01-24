@@ -1,25 +1,30 @@
-# Настройка контейнеров (на примере tv_server)
+# Настройка контейнеров (на примере drums_channels)
 ### .ENV для docker-compose:
 ```env
 APP_PATH=./www
-APP_NAME=tv_server
+APP_NAME=drums_channels
 APP_NETWORK=${APP_NAME}_network
 TZ=Europe/Kiev
+PHP_VER=8.0
+NODE_VER=14
+PHP_FPM_CONF=xlaravel.pool.conf
 ```
 ## Настройка портов nginx (если нужно) в docker-compose.yml
 ```yml
 nginx:
-    ...
-    ports:
-      - "88:80"
-      - "448:443"
+  ...
+  ports:
+    - "88:80"
+    - "448:443"
 ```
-# Начальная настройка самого проекта (на примере tv_server)
+# Начальная настройка самого проекта (на примере drums_channels)
 
 ## Клонировать проект
-Создаем папку для проекта (если не сделать - будет создана папка с правами root, а не www-data)
+Создаем папку для файлов проекта и настраиваем для нее права www-data
 ```sh
 mkdir www
+chown -R 1000:1000 www
+chmod -R g+s www
 ```
 Сборка и запуск контейнеров
 ```sh
@@ -32,7 +37,7 @@ docker-compose exec php bash
 Клонируем проект в текущую папку
 ```sh
 git init .
-git remote add origin https://gitlab.sweet.tv/php/tv_server_admin.git
+git remote add origin https://git.mytrinity.com.ua/iptv/drums-channels.git
 git pull origin master
 ```
 

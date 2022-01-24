@@ -2,9 +2,13 @@ version: '3.8'
 services:
   php:
     container_name: ${APP_NAME}_php
-    build: ./images/php
+    build:
+      context: ./images/php/php-${PHP_VER}-fpm
+      args:
+        NODE_VER: ${NODE_VER}
     volumes:
       - ${APP_PATH}:/var/www
+      - ./images/php/php-fpm.d/${PHP_FPM_CONF}:/usr/local/etc/php-fpm.d/${PHP_FPM_CONF}
     networks:
       - network_name_from_env
     environment:
@@ -15,11 +19,11 @@ services:
         max-size: "10m"
         mode: "non-blocking"
   nginx:
-    container_name: ${APP_NAME}_nginx
+    container_name: ${APP_NAME}_nginxz
     image: nginx:latest
     ports:
-      - "80:80"
-      - "443:443"
+      - "86:80"
+      - "446:443"
     volumes:
       - ${APP_PATH}:/var/www
       - ./hosts:/etc/nginx/conf.d
@@ -54,3 +58,6 @@ networks:
   network_name_from_env:
     name: ${APP_NETWORK}
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
