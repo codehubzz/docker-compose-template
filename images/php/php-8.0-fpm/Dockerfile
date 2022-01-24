@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
         wget \
         git \
         git-flow \
+        bash-completion\
         vim \
         nano \
 #        nodejs \
@@ -37,12 +38,22 @@ ARG NODE_VER
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VER}.x | bash -
 RUN apt-get install -y nodejs
 
+# Configure LDAP.
+RUN apt-get update \
+ && apt-get install libldap2-dev -y \
+ && rm -rf /var/lib/apt/lists/* \
+ && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+ && docker-php-ext-install ldap
+
 #PROJECT WORKDIR
 WORKDIR /var/www
 
 #PERMISSIONS WWW-DATA
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 USER 1000
+
+#Enable git autocomplete
+COPY bash.bashrc /etc
 
 # CUSTOM PHP.INI CONFIG
 COPY conf.d/* /usr/local/etc/php/conf.d/
