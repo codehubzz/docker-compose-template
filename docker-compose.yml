@@ -22,8 +22,8 @@ services:
     container_name: ${APP_NAME}_nginxz
     image: nginx:latest
     ports:
-      - "86:80"
-      - "446:443"
+      - "89:80"
+      - "449:443"
     volumes:
       - ${APP_PATH}:/var/www
       - ./hosts:/etc/nginx/conf.d
@@ -60,4 +60,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/24
+        - subnet: 172.11.0.0/24
