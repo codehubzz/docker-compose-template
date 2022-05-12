@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 services:
   php:
     container_name: ${APP_NAME}_php
@@ -7,10 +7,9 @@ services:
       args:
         NODE_VER: ${NODE_VER}
     volumes:
+      - ~/.ssh:/var/www/.ssh
       - ${APP_PATH}:/var/www
       - ./images/php/php-fpm.d/${PHP_FPM_CONF}:/usr/local/etc/php-fpm.d/${PHP_FPM_CONF}
-    networks:
-      - network_name_from_env
     environment:
       TZ: ${TZ}
     logging:
@@ -30,8 +29,6 @@ services:
       - ./hosts/ssl:/etc/nginx/ssl
       - ./hosts/access.conf:/etc/nginx/access.conf
       - ./logs/nginx:/var/log/nginx
-    networks:
-      - network_name_from_env
     environment:
       TZ: ${TZ}
     logging:
@@ -49,17 +46,8 @@ services:
 #      - ./images/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini
 #    links:
 #      - php
-#    networks:
-#      - network_name_from_env
 #    logging:
 #      options:
 #        max-file: "3"
 #        max-size: "10m"
 #        mode: "non-blocking"
-networks:
-  network_name_from_env:
-    name: ${APP_NETWORK}
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.12.0.0/24

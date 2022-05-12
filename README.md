@@ -54,7 +54,7 @@ npm install && npm run prod
 ## Готово
 Через порт который указан в docker-compose.yml должен быть доступен проект
 ```sh
-http://localhost:88/
+https://localhost/
 ```
 
 
