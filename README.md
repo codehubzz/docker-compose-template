@@ -1,12 +1,12 @@
-# Настройка контейнеров (на примере drums_channels)
+# Настройка контейнеров
 ### .ENV для docker-compose:
 ```env
 APP_PATH=./www
-APP_NAME=drums_channels
+APP_NAME=chatbot
 APP_NETWORK=${APP_NAME}_network
 TZ=Europe/Kiev
-PHP_VER=8.0
-NODE_VER=14
+PHP_VER=7.3
+#NODE_VER=14 #COMMENT THIS LINE FOR LATEST VER
 PHP_FPM_CONF=xlaravel.pool.conf
 ```
 ## Настройка портов nginx (если нужно) в docker-compose.yml
@@ -14,8 +14,8 @@ PHP_FPM_CONF=xlaravel.pool.conf
 nginx:
   ...
   ports:
-    - "88:80"
-    - "448:443"
+    - "80:80"
+    - "443:443"
 ```
 # Начальная настройка самого проекта (на примере drums_channels)
 
@@ -37,7 +37,7 @@ docker-compose exec php bash
 Клонируем проект в текущую папку
 ```sh
 git init .
-git remote add origin https://git.mytrinity.com.ua/iptv/drums-channels.git
+git remote add origin https://gitlab.sweet.tv/php/bot.sweet.tv.git
 git pull origin master
 ```
 
@@ -62,6 +62,15 @@ npm install && npm run prod
 http://localhost:88/
 ```
 
+## Supervisor
+Для того чтобы работал сервис supervisor нужно раскоментировать строки для этого сервиса в docker-compose.xml
+```sh
+#  supervisor:
+#    container_name: ${APP_NAME}_supervisor
+#    build: images/supervisor/php-${PHP_VER}-cli-alpine
+#    ...
+#
+```
 
 ## Crontab
 Для того чтобы работал сервис cron нужно раскоментировать строки для этого сервиса в docker-compose.xml
