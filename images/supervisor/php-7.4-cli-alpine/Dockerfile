@@ -9,13 +9,17 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && chmod uga+x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions \
       gd xml zip curl mcrypt iconv mbstring sockets opcache redis \
-      mysqli pgsql pdo pdo_mysql pdo_pgsql
+      mysqli pgsql pdo pdo_mysql pdo_pgsql \
+    && docker-php-source delete
 
 #ANOTHER EXTENSIONS
-RUN apk --no-cache add supervisor bash tzdata shadow
+RUN apk --no-cache add supervisor bash tzdata
 
 #TIMEZONE
 ENV TZ=${TZ}
+
+# CUSTOM PHP.INI CONFIG
+COPY conf.d/* /usr/local/etc/php/conf.d/
 
 #PERMISSIONS WWW-DATA
 #setting same uid as in php container (1000)

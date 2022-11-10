@@ -17,6 +17,9 @@ RUN apk --no-cache add bash tzdata
 #TIMEZONE
 ENV TZ=${TZ}
 
+# CUSTOM PHP.INI CONFIG
+COPY conf.d/* /usr/local/etc/php/conf.d/
+
 #CRONJOBS
 COPY /config/cronjobs /etc/crontabs/root
 
