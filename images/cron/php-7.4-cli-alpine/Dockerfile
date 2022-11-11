@@ -12,7 +12,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
       mysqli pgsql pdo pdo_mysql pdo_pgsql
 
 #ANOTHER EXTENSIONS
-RUN apk --no-cache add bash tzdata
+RUN apk --no-cache add bash tzdata shadow
 
 #TIMEZONE
 ENV TZ=${TZ}
@@ -20,8 +20,22 @@ ENV TZ=${TZ}
 # CUSTOM PHP.INI CONFIG
 COPY conf.d/* /usr/local/etc/php/conf.d/
 
+# SUPERCRONIC
+RUN curl -L "https://github.com/aptible/supercronic/releases/download/v0.2.1/supercronic-linux-amd64"  \
+    -o /usr/bin/supercronic \
+    && chmod +x /usr/bin/supercronic \
+    && mkdir -p /etc/supercronic
+
 #CRONJOBS
-COPY /config/cronjobs /etc/crontabs/root
+ADD /config/cronjobs /etc/supercronic/cronjobs
+
+#PERMISSIONS WWW-DATA
+#setting same uid as in php container (1000)
+#default www-data uid is 82 in alpine
+RUN deluser www-data
+RUN /usr/sbin/groupadd -g 1000 www-data
+RUN /usr/sbin/useradd -s /bin/sh -g 1000 -u 1000 www-data
+USER 1000
 
 #PHP WORKDIR
 WORKDIR /var/www
