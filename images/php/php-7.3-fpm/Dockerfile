@@ -2,14 +2,6 @@ FROM php:7.3-fpm
 
 #EXTENSIONS
 RUN apt-get update && apt-get install -y \
-        curl \
-        wget \
-        git \
-        git-flow \
-        bash-completion\
-        mc\
-        vim \
-        nano \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -25,6 +17,16 @@ RUN apt-get update && apt-get install -y \
      #    Чистим временные файлы
         && docker-php-source delete \
         && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y
+
+# Install Postgre PDO
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
+
+#INTERBASE FOR FIREBASE DB
+RUN apt-get -y install firebird-dev
+RUN docker-php-ext-install interbase
+RUN docker-php-ext-enable interbase
 
 #PHP REDIS
 RUN pecl install redis && docker-php-ext-enable redis
@@ -50,6 +52,17 @@ RUN if [ "$NODE_VER" != "" ];\
     nodejs \
     npm ;\
   fi
+
+#EXTENSIONS
+RUN apt-get update && apt-get install -y \
+        curl \
+        wget \
+        git \
+        git-flow \
+        bash-completion\
+        mc\
+        vim \
+        nano
 
 #PROJECT WORKDIR
 WORKDIR /var/www
