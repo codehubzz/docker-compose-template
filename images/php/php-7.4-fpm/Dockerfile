@@ -24,6 +24,11 @@ RUN apt-get update && apt-get install -y \
         && docker-php-source delete \
         && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y
 
+# Install Postgres
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
+
 #PHP REDIS
 RUN pecl install redis && docker-php-ext-enable redis
 

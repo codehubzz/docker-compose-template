@@ -21,8 +21,8 @@ services:
     container_name: ${APP_NAME}_nginxz
     image: nginx:latest
     ports:
-      - "80:80"
-      - "443:443"
+      - "94:80"
+      - "454:443"
     volumes:
       - ${APP_PATH}:/var/www
       - ./hosts:/etc/nginx/conf.d
@@ -36,29 +36,29 @@ services:
         mode: "non-blocking"
     links:
       - php
-  supervisor:
-    container_name: ${APP_NAME}_supervisor
-    build: images/supervisor/php-${PHP_VER}-cli-alpine
-    volumes:
-      - ${APP_PATH}:/var/www
-      - ./images/supervisor/etc/supervisord.conf:/etc/supervisord.conf
-      - ./images/supervisor/etc/supervisor.d/:/etc/supervisor.d/
-    environment:
-      TZ: ${TZ}
-    command: [ "supervisord", "-c", "/etc/supervisord.conf" ]
-  cron:
-    container_name: ${APP_NAME}_cron
-    build: ./images/cron/php-${PHP_VER}-cli-alpine
-    volumes:
-      - ${APP_PATH}:/var/www
-      - ./images/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini
-    links:
-      - php
-    environment:
-      TZ: ${TZ}
-    command: [ "supercronic", "/etc/supercronic/cronjobs" ]
-    logging:
-      options:
-        max-file: "3"
-        max-size: "10m"
-        mode: "non-blocking"
+#  supervisor:
+#    container_name: ${APP_NAME}_supervisor
+#    build: images/supervisor/php-${PHP_VER}-cli-alpine
+#    volumes:
+#      - ${APP_PATH}:/var/www
+#      - ./images/supervisor/etc/supervisord.conf:/etc/supervisord.conf
+#      - ./images/supervisor/etc/supervisor.d/:/etc/supervisor.d/
+#    environment:
+#      TZ: ${TZ}
+#    command: [ "supervisord", "-c", "/etc/supervisord.conf" ]
+#  cron:
+#    container_name: ${APP_NAME}_cron
+#    build: ./images/cron/php-${PHP_VER}-cli-alpine
+#    volumes:
+#      - ${APP_PATH}:/var/www
+#      - ./images/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini
+#    links:
+#      - php
+#    environment:
+#      TZ: ${TZ}
+#    command: [ "supercronic", "/etc/supercronic/cronjobs" ]
+#    logging:
+#      options:
+#        max-file: "3"
+#        max-size: "10m"
+#        mode: "non-blocking"

@@ -15,17 +15,20 @@ RUN apt-get update && apt-get install -y \
         libonig-dev \
         libzip-dev \
         libmcrypt-dev \
-#        && pecl install mcrypt-1.0.3 \
-#	    && docker-php-ext-enable mcrypt \
-        && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip sockets opcache \
+        && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip sockets opcache\
 	    && docker-php-ext-configure gd --with-freetype --with-jpeg \
         && docker-php-ext-install -j$(nproc) gd \
-    #    Чистим временные файлы
+     #    Чистим временные файлы
         && docker-php-source delete \
         && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y
 
+# Install Postgre PDO
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
+
 #PHP REDIS
-#RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
 
 #COMPOSER
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
