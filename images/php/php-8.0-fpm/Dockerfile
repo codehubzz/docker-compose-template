@@ -49,6 +49,11 @@ RUN if [ "$NODE_VER" != "" ];\
     npm ;\
   fi
 
+#INTERBASE FOR FIREBASE DB
+RUN apt-get update && \
+    apt-get install -y firebird-dev && \
+    docker-php-ext-install pdo_firebird
+
 #PROJECT WORKDIR
 WORKDIR /var/www
 
