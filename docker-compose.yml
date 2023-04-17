@@ -21,8 +21,8 @@ services:
     container_name: ${APP_NAME}_nginxz
     image: nginx:latest
     ports:
-      - "92:80"
-      - "452:443"
+      - "81:80"
+      - "444:443"
     volumes:
       - ${APP_PATH}:/var/www
       - ./hosts:/etc/nginx/conf.d
@@ -36,6 +36,14 @@ services:
         mode: "non-blocking"
     links:
       - php
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "8002:6379"
+    links:
+      - php
 #  supervisor:
 #    container_name: ${APP_NAME}_supervisor
 #    build: images/supervisor/php-${PHP_VER}-cli-alpine
@@ -46,6 +54,8 @@ services:
 #    environment:
 #      TZ: ${TZ}
 #    command: [ "supervisord", "-c", "/etc/supervisord.conf" ]
+#    links:
+#      - php
 #  cron:
 #    container_name: ${APP_NAME}_cron
 #    build: ./images/cron/php-${PHP_VER}-cli-alpine
